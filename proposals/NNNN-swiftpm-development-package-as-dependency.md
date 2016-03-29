@@ -9,7 +9,7 @@
 
 I propose to enable SwiftPM to use a package that is still under development as a dependency for another package during testing and development.
 
-Swift-evolution thread: [link to the discussion thread for that proposal](https://lists.swift.org/pipermail/swift-evolution)
+Swift-evolution thread: [link](https://lists.swift.org/pipermail/swift-evolution/Week-of-Mon-20160328/013710.html)
 
 ## Motivation
 
