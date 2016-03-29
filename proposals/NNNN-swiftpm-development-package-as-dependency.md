@@ -79,8 +79,10 @@ let package = Package(
     ]
 )
 ```
-However it has the following downsides:
+However it has following issues:
+
 1) You have to remember to modify the manifest file back at some point, and if you are iterating frequently this is tedious and error-prone
+
 2) We don’t want any chance that `DevPackage` gets into the package graph and thus the ecosystem.
 
 ## Acknowledgements
