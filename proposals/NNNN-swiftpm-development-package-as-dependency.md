@@ -33,6 +33,37 @@ and enhancements without being tied to the current dependency system.
 This approach limits `DevPackage` dependencies to local file systems. Remote repositories
 cannot be used with this keyword. 
 
+The following example demonstrate how to include a `DevPackage` while building a swift package.
+In this example, two `DevPackage`s are specified (MyLib and MyLib2)
+
+```
+$ swift build --dev-pkg=../MyLib --dev-pkg=../MyLib2
+```
+
+Under this design:
+
+* `DevPackage` is limited strictly to the root package.
+* A `DevPackage` is not copied inside `Packages/` and does not require version control.
+* SwiftPM uses the `DevPackage`'s source directory for building, permitting in-place development on the local file system.
+* SwiftPM disallows non-local `DevPackage` sources. To use a remote package, the developer must first clone a package and then specify the local path.
+* There are no version specifications for `DevPackage`.
+* In case of a collision due to other dependencies, the `DevPackage` will be preferred.
+
+## Impact on existing code
+
+This proposal does not impact existing code.
+
+## Alternatives considered
+
+I propose two possible alternatives to this problem:
+
+1. Create a executable target within the library package for development testing.
+2. Use XCTest to test the library.
+
+Both alternate approaches permit testing a library module but they will not simulate a full SwiftPM package.
+
+Another alternative that was considered was adding the entry in Manifest file instead of commandline override:
+
 The following example demonstrates what a manifest file would look like. In this example,
 the `DevPackage` is specified using a local path and the `majorVersion` is used as is for 
 this `DevPackage`.
@@ -48,28 +79,9 @@ let package = Package(
     ]
 )
 ```
-
-Under this design:
-
-* `DevPackage` is limited strictly to the root package. The manifest of any dependency containing a `DevPackage` will fail to build.
-* A `DevPackage` is not copied inside `Packages/` and does not require version control.
-* SwiftPM uses the `DevPackage`'s source directory for building, permitting in-place development on the local file system.
-* SwiftPM disallows non-local `DevPackage` sources. To use a remote package, the developer must first clone a package and then specify the local path.
-* Version numbers are specified for `DevPackage` entries within the manifest file. 
-* Should the `DevPackage` version not be selected after resolving the dependency graph, the build will succeed with a warning.
-
-## Impact on existing code
-
-This proposal does not impact existing code.
-
-## Alternatives considered
-
-I propose two possible alternatives to this problem:
-
-1. Create a executable target within the library package for development testing.
-2. Use XCTest to test the library.
-
-Both alternate approaches permit testing a library module but they will not simulate a full SwiftPM package.
+However it has the following downsides:
+1) You have to remember to modify the manifest file back at some point, and if you are iterating frequently this is tedious and error-prone
+2) We don’t want any chance that `DevPackage` gets into the package graph and thus the ecosystem.
 
 ## Acknowledgements
 
