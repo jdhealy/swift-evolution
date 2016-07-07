@@ -14,7 +14,7 @@ This proposal aims to address two issues:
 
 2. Import (and build) selected targets of a dependency.
 
-[swift-evolution thread]()
+[swift-evolution thread](https://lists.swift.org/pipermail/swift-build-dev/Week-of-Mon-20160704/000531.html)
 
 ## Motivation
 
